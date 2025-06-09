@@ -9,10 +9,9 @@ const createReview = async (req, res) => {
       rating: data.rating,
     });
 
-    //! Implement the correct syntax for this => Updating the product reviews array with the new reviews _id
-    //   const product = await Product.findById(data.productId);
-    //   product.reviews.push(review._id);
-    //   await product.save();
+    const product = await Product.findById(data.productId);
+    product.reviews.push(review._id);
+    await product.save();
 
     res.status(201).send();
   } catch (error) {
