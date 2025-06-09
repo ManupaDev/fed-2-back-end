@@ -6,10 +6,11 @@ import {
     getCategoryById,
     updateCategoryById,
 } from "../application/category.js";
+import isAuthenticated from "./middleware/authentication-middleware.js";
 
 const categoryRouter = express.Router();
 
-categoryRouter.route("/").get(getAllCategories).post(createCategory);
+categoryRouter.route("/").get(getAllCategories).post(isAuthenticated, createCategory);
 
 categoryRouter
   .route("/:id")

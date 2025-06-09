@@ -1,40 +1,66 @@
 import Category from "../infrastructure/db/entities/category.js";
 
-const getAllCategories = async (req, res) => {
-  const categories = await Category.find();
-  res.json(categories);
-};
+import ValidationError from "../domain/errors/validation-error.js";
+import NotFoundError from "../domain/errors/not-found-error.js";
 
-const createCategory = async (req, res) => {
-  const newCategory = req.body;
-  await Category.create(newCategory);
-  res.status(201).json(newCategory);
-};
-
-const getCategoryById = async (req, res) => {
-  const category = await Category.findById(req.params.id);
-  if (!category) {
-    return res.status(404).json({ message: "Category not found" });
+const getAllCategories = async (req, res, next) => {
+  try {
+    const categories = await Category.find();
+    res.json(categories);
+  } catch (error) {
+    next(error);
   }
-  res.json(category);
 };
 
-const updateCategoryById = async (req, res) => {
-  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  if (!category) {
-    return res.status(404).json({ message: "Category not found" });
+const createCategory = async (req, res, next) => {
+  try {
+    const newCategory = req.body;
+    if (!newCategory.name) {
+      throw new ValidationError("Category name is required");
+    }
+    await Category.create(newCategory);
+    res.status(201).json(newCategory);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json(category);
 };
 
-const deleteCategoryById = async (req, res) => {
-  const category = await Category.findByIdAndDelete(req.params.id);
-  if (!category) {
-    return res.status(404).json({ message: "Category not found" });
+const getCategoryById = async (req, res, next) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (!category) {
+      throw new NotFoundError("Category not found");
+    }
+    res.json(category);
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({ message: "Category deleted successfully" });
+};
+
+const updateCategoryById = async (req, res, next) => {
+  try {
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!category) {
+      throw new NotFoundError("Category not found");
+    }
+    res.status(200).json(category);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteCategoryById = async (req, res, next) => {
+  try {
+    const category = await Category.findByIdAndDelete(req.params.id);
+    if (!category) {
+      throw new NotFoundError("Category not found");
+    }
+    res.status(200).json({ message: "Category deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export {
