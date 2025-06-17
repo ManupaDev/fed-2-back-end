@@ -5,11 +5,13 @@ import categoryRouter from "./api/category.js";
 import reviewRouter from "./api/review.js";
 import { connectDB } from "./infrastructure/db/index.js";
 import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware.js";
+import cors from "cors";
 
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json()); //It conversts the incomign json payload of a  request into a javascript object found in req.body
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // app.use((req, res, next) => {
 //   console.log("Hello from pre-middleware");
