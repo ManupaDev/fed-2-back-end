@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express from "express";
-import productRouter from "./api/product.js";
-import categoryRouter from "./api/category.js";
-import reviewRouter from "./api/review.js";
-import { connectDB } from "./infrastructure/db/index.js";
-import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware.js";
+import productRouter from "./api/product";
+import categoryRouter from "./api/category";
+import reviewRouter from "./api/review";
+import { connectDB } from "./infrastructure/db/index";
+import globalErrorHandlingMiddleware from "./api/middleware/global-error-handling-middleware";
 import cors from "cors";
+import { orderRouter } from "./api/order";
 
 const app = express();
 
@@ -21,12 +22,13 @@ app.use(cors({ origin: "http://localhost:5173" }));
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/reviews", reviewRouter);
+app.use("/api/orders", orderRouter);
 
 app.use(globalErrorHandlingMiddleware);
 
 connectDB();
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

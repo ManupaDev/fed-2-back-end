@@ -1,4 +1,24 @@
-const products = [
+type Product = {
+  _id: string;
+  categoryId: string;
+  colorId?: string;
+  image: string;
+  name: string;
+  price: number;
+  stripePriceId: string;
+  description: string;
+  featured: boolean;
+  __v: number;
+};
+
+type Category = {
+  _id: string;
+  name: string;
+  slug: string;
+  __v: number;
+};
+
+const products: Product[] = [
   {
     _id: "67def6e42b2c146578729f60",
     categoryId: "67dee9c012d36efdd1027b43",
@@ -235,7 +255,7 @@ const products = [
   },
 ];
 
-const categories = [
+const categories: Category[] = [
   {
     _id: "ALL",
     name: "All",

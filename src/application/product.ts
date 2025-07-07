@@ -1,8 +1,15 @@
-import Product from "../infrastructure/db/entities/product.js";
-import ValidationError from "../domain/errors/validation-error.js";
-import NotFoundError from "../domain/errors/not-found-error.js";
+import Product from "../infrastructure/db/entities/Product";
+import ValidationError from "../domain/errors/validation-error";
+import NotFoundError from "../domain/errors/not-found-error";
 
-const getAllProducts = async (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+import { CreateProductDTO } from "../domain/dto/product";
+
+const getAllProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const categoryId = req.query.categoryId;
     if (categoryId) {
@@ -17,23 +24,29 @@ const getAllProducts = async (req, res, next) => {
   }
 };
 
-const createProduct = async (req, res, next) => {
+const createProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const newProduct = req.body;
-    if (!newProduct.name) {
-      throw new ValidationError("Product name is required");
+    const result = CreateProductDTO.safeParse(req.body);
+    if (!result.success) {
+      throw new ValidationError(result.error.message);
     }
-    if (!newProduct.categoryId) {
-      throw new ValidationError("Category ID is required");
-    }
-    await Product.create(newProduct);
-    res.status(201).json(newProduct);
+
+    await Product.create(result.data);
+    res.status(201).send();
   } catch (error) {
     next(error);
   }
 };
 
-const getProductById = async (req, res, next) => {
+const getProductById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const product = await Product.findById(req.params.id).populate("reviews");
     if (!product) {
@@ -45,7 +58,11 @@ const getProductById = async (req, res, next) => {
   }
 };
 
-const updateProductById = async (req, res, next) => {
+const updateProductById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -59,7 +76,11 @@ const updateProductById = async (req, res, next) => {
   }
 };
 
-const deleteProductById = async (req, res, next) => {
+const deleteProductById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {

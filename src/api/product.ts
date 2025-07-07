@@ -5,8 +5,8 @@ import {
   getProductById,
   updateProductById,
   deleteProductById,
-} from "../application/product.js";
-import isAuthenticated from "./middleware/authentication-middleware.js";
+} from "../application/product";
+import isAuthenticated from "./middleware/authentication-middleware";
 
 const productRouter = express.Router();
 

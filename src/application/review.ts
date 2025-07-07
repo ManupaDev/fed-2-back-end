@@ -1,7 +1,9 @@
-import Review from "../infrastructure/db/entities/review.js";
-import Product from "../infrastructure/db/entities/product.js";
+import Review from "../infrastructure/db/entities/Review";
+import Product from "../infrastructure/db/entities/Product";
 
-const createReview = async (req, res) => {
+import { Request, Response, NextFunction } from "express";
+
+const createReview = async (req:Request, res:Response, next:NextFunction) => {
   try {
     const data = req.body;
     const review = await Review.create({
