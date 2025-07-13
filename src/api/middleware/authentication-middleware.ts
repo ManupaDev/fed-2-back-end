@@ -1,13 +1,11 @@
-import UnauthorizedError from "../../domain/errors/unauthorized-error";
 import { Request, Response, NextFunction } from "express";
+import UnauthorizedError from "../../domain/errors/unauthorized-error";
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  const isUserLoggedIn = false;
-  if (!isUserLoggedIn) {
+  if (!req?.auth) {
     throw new UnauthorizedError("Unauthorized");
-  } else {
-    next();
   }
+  next();
 };
 
 export default isAuthenticated;

@@ -10,6 +10,7 @@ const globalErrorHandlingMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(err);
   if (err instanceof ValidationError) {
     res.status(400).json({ message: err.message });
   } else if (err instanceof NotFoundError) {
