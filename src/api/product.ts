@@ -6,6 +6,7 @@ import {
   updateProductById,
   deleteProductById,
   uploadProductImage,
+  getProductsForSearchQuery,
 } from "../application/product";
 import isAuthenticated from "./middleware/authentication-middleware";
 import { isAdmin } from "./middleware/authorization-middleware";
@@ -16,6 +17,8 @@ productRouter
   .route("/")
   .get(getAllProducts)
   .post(isAuthenticated, isAdmin, createProduct);
+
+productRouter.get("/search", getProductsForSearchQuery);
 
 productRouter
   .route("/:id")

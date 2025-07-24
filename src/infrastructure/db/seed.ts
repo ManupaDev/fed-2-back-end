@@ -5,14 +5,29 @@ import Product from "./entities/Product";
 
 const CATEGORY_NAMES = ["Socks", "Pants", "T-shirts", "Shoes", "Shorts"];
 
+const ADJECTIVES = [
+  "Classic", "Sporty", "Elegant", "Comfy", "Trendy", "Cool", "Premium", "Casual", "Bold", "Vivid",
+  "Soft", "Durable", "Lightweight", "Cozy", "Modern", "Vintage", "Chic", "Sleek", "Eco", "Urban"
+];
+const NOUNS = [
+  "Runner", "Style", "Fit", "Wear", "Edition", "Line", "Collection", "Piece", "Design", "Model",
+  "Comfort", "Edge", "Wave", "Touch", "Look", "Trend", "Vibe", "Aura", "Motion", "Essence"
+];
+
+function getRandomName(categoryName: string) {
+  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+  return `${adj} ${categoryName} ${noun}`;
+}
+
 const createProductsForCategory = async (categoryId: any, categoryName: string) => {
   const products = [];
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 0; i < 10; i++) {
     products.push({
       categoryId,
-      name: `${categoryName} Product ${i}`,
+      name: getRandomName(categoryName),
       price: Math.floor(Math.random() * 100) + 10,
-      image: `https://via.placeholder.com/150?text=${encodeURIComponent(categoryName + ' ' + i)}`,
+      image: `https://via.placeholder.com/150?text=${encodeURIComponent(categoryName)}`,
       stock: Math.floor(Math.random() * 50) + 1,
       reviews: [],
     });

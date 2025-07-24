@@ -28,6 +28,39 @@ const getAllProducts = async (
   }
 };
 
+const getProductsForSearchQuery = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { search } = req.query;
+    const results = await Product.aggregate([
+      {
+        $search: {
+          index: "default",
+          autocomplete: {
+            path: "name",
+            query: search,
+            tokenOrder: "any",
+            fuzzy: {
+              maxEdits: 1,
+              prefixLength: 2,
+              maxExpansions: 256,
+            },
+          },
+          highlight: {
+            path: "name",
+          },
+        },
+      },
+    ]);
+    res.json(results);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createProduct = async (
   req: Request,
   res: Response,
@@ -119,12 +152,10 @@ const uploadProductImage = async (
       }
     );
 
-    res
-      .status(200)
-      .json({
-        url,
-        publicURL: `${process.env.CLOUDFLARE_PUBLIC_DOMAIN}/${id}`,
-      });
+    res.status(200).json({
+      url,
+      publicURL: `${process.env.CLOUDFLARE_PUBLIC_DOMAIN}/${id}`,
+    });
   } catch (error) {
     next(error);
   }
@@ -136,5 +167,6 @@ export {
   getAllProducts,
   getProductById,
   updateProductById,
+  getProductsForSearchQuery,
   uploadProductImage,
 };
