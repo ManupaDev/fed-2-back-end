@@ -2,6 +2,7 @@ import Review from "../infrastructure/db/entities/Review";
 import Product from "../infrastructure/db/entities/Product";
 
 import { Request, Response, NextFunction } from "express";
+import NotFoundError from "../domain/errors/not-found-error";
 
 const createReview = async (req:Request, res:Response, next:NextFunction) => {
   try {
@@ -12,8 +13,11 @@ const createReview = async (req:Request, res:Response, next:NextFunction) => {
     });
 
     const product = await Product.findById(data.productId);
+    if (!product) {
+      throw new NotFoundError("Product not found");
+    }
     product.reviews.push(review._id);
-    await product.save();
+    await product.save(); 
 
     res.status(201).send();
   } catch (error) {
