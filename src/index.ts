@@ -15,7 +15,7 @@ import { handleWebhook } from "./application/payment";
 const app = express();
 
 app.use(clerkMiddleware());
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 
 app.post(
   "/api/stripe/webhook",
