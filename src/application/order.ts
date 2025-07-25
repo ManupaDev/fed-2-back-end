@@ -11,13 +11,13 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = getAuth(req);
 
     const address = await Address.create(data.shippingAddress);
-    await Order.create({
+    const order = await Order.create({
       addressId: address._id,
       items: data.orderItems,
       userId: userId,
     });
 
-    res.status(201).send();
+    res.status(201).json(order);
   } catch (error) {
     next(error);
   }
