@@ -46,7 +46,7 @@ const createProductsForCategory = async (categoryId: any, categoryName: string) 
       image: `https://via.placeholder.com/150?text=${encodeURIComponent(categoryName)}`,
       stock: Math.floor(Math.random() * 50) + 1,
       reviews: [],
-      stripePriceId: stripeProduct.id
+      stripePriceId: stripeProduct.default_price
     });
   }
   await Product.insertMany(products);
