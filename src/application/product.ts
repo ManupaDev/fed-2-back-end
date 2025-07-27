@@ -82,7 +82,7 @@ const createProduct = async (
       },
     });
 
-    await Product.create({ ...result.data, stripePriceId: stripeProduct.id });
+    await Product.create({ ...result.data, stripePriceId: stripeProduct.default_price });
     res.status(201).send();
   } catch (error) {
     next(error);
